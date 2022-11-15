@@ -10,7 +10,7 @@ probofvalid=0;validity=0
 # countUniform1=0;countUniform2=0;countUniform3=0;countUniform4=0;countUniform5=0;countUniform6=0;countUniform7=0;countUniform8=0;countUniform9=0;countUniform10=0;countUniform11=0;countUniform12=0;countUniform13=0;countUniform14=0;countUniform15=0;countUniform16=0;countUniform17=0;countUniform18=0
 # countUniform19=0;countUniform20=0;countUniform21=0;countUniform22=0;countUniform23=0;countUniform24=0;countUniform25=0;countUniform26=0;countUniform27=0;countUniform28=0;countUniform29=0;countUniform30=0;countUniform31=0;countUniform32=0;countUniform33=0;countUniform34=0;countUniform35=0;countUniform36=0
 
-
+system.time(
 while(length(draws)<1000){
   
   pot1 = c("CONMEBOL1","EU1","CONMEBOL2","EU2","EU3","EU4","EU5","EU6","EU7","EU8","EU9","EU10","CONCACAF1","CONMEBOL3","CONCACAF2","CONCACAF3")
@@ -21,23 +21,9 @@ while(length(draws)<1000){
   
   initialgroups = array(rep(group,16),dim=c(1,3,16)) #Gives us all groups but are empty
   
-  for(i in 1:length(pot1)){
-    selected = sample(pot1,1)
-    initialgroups[1,1,i] = selected
-    pot1 = pot1[!pot1 %in% selected] 
-  }
-  
-  for(i in 1:length(pot2)){
-    selected = sample(pot2,1)
-    initialgroups[1,2,i] = selected
-    pot2 = pot2[!pot2 %in% selected]  
-  }
-  
-  for(i in 1:length(pot3)){
-    selected = sample(pot3,1)
-    initialgroups[1,3,i] = selected
-    pot3 = pot3[!pot3 %in% selected] 
-  }
+  initialgroups[1,1,] = sample(pot1,16)
+  initialgroups[1,2,] = sample(pot2,16)
+  initialgroups[1,3,] = sample(pot3,16)
   
   
   reg = initialgroups
@@ -104,7 +90,7 @@ while(length(draws)<1000){
     draws[[totalvalid]]=initialgroups
     print(paste("Simulation",totalvalid))}
 } 
-
+)
 
 # probofvalid = sum(validity)/length(validity)
 total = length(draws)
