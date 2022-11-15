@@ -26,10 +26,11 @@ pot1 = c("ITNap","PORPor","GERBay","UKTot","UKChe","SPARM","UKMC","PORBen")
 pot2 = c("UKLiv","BELCB","ITIM","GERFra","ITMil","GERLei","GERDort","FRAPSG")
 row.names(countMatrixu) <- pot1;
 colnames(countMatrixu) <- pot2;
+pots=rbind(pot1,pot2)
 
 alldraws=list();validity=c()
 
-while(length(alldraws)<100000){
+while(length(alldraws)<1000){
   initialgroups = array(rep(NA,8),dim=c(1,2,8)) 
   pot1 = c("ITNap","PORPor","GERBay","UKTot","UKChe","SPARM","UKMC","PORBen")
   pot2 = c("UKLiv","BELCB","ITIM","GERFra","ITMil","GERLei","GERDort","FRAPSG")
@@ -42,6 +43,7 @@ while(length(alldraws)<100000){
     alldraws[[totalvalid+1]] = initialgroups
     totalvalid=totalvalid+1
   }
+  print(paste("Simulation",totalvalid))
 }
 
 
@@ -51,13 +53,15 @@ for(i in 1:length(alldraws)){
 countMatrixu=countMatrixu/length(alldraws);countMatrixu
 
 
-varmatrixu = countMatrixu * (1 - countMatrixu) / sqrt(length(alldraws))
+varmatrixu = countMatrixu * (1 - countMatrixu) / length(alldraws)
 round(varmatrixu, 4)
-confintmatrixu = qnorm(0.975, 0, 1) * varmatrixu
+confintmatrixu = qnorm(0.975, 0, 1) * sqrt(varmatrixu)
 round(confintmatrixu, 4)
 lbmatrixu = countMatrixu - confintmatrixu
 round(lbmatrixu, 4)
 ubmatrixu = countMatrixu + confintmatrixu
 round(ubmatrixu, 4)
+
+
 
 
