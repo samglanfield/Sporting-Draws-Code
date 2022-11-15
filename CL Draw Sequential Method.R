@@ -50,7 +50,7 @@ pot1 = c("ITNap","PORPor","GERBay","UKTot","UKChe","SPARM","UKMC","PORBen")
 pot2 = c("UKLiv","BELCB","ITIM","GERFra","ITMil","GERLei","GERDort","FRAPSG")
 pots=rbind(pot1,pot2)
 
-nsim=100000;validityindex=c();alldraws=list()
+nsim=50000;validityindex=c();alldraws=list()
 system.time(for(r in 1:nsim){
 
 pot1 = c("ITNap","PORPor","GERBay","UKTot","UKChe","SPARM","UKMC","PORBen")
@@ -104,6 +104,7 @@ assign("initialgroups",initialgroups,envir = .GlobalEnv)
 }
 validityindex[r] = checkvalid()
 alldraws[[r]] = initialgroups
+print(paste("Simulation",r))
 })
 
 incMatrix <- function(i, j) {
@@ -123,13 +124,15 @@ for(i in 1:length(alldraws)){
 countMatrix=countMatrix/length(alldraws);countMatrix
 
 
-varmatrix = countMatrix * (1 - countMatrix) / sqrt(length(alldraws))
+varmatrix = countMatrix * (1 - countMatrix) / length(alldraws)
 round(varmatrix, 4)
-confintmatrix = qnorm(0.975, 0, 1) * varmatrix
+confintmatrix = qnorm(0.975, 0, 1) * sqrt(varmatrix)
 round(confintmatrix, 4)
 lbmatrix = countMatrix - confintmatrix
 round(lbmatrix, 4)
 ubmatrix = countMatrix + confintmatrix
 round(ubmatrix, 4)
+
+
 
 
