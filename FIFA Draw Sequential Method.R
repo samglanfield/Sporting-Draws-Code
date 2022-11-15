@@ -1,4 +1,4 @@
-
+set.seed(31012001)
 
 checkvalid = function() {
   valid = matrix(0, nrow = 16, ncol = 6)
@@ -88,7 +88,7 @@ assignment = function(rowposition) {
 draws = list()
 b = c()
 
-for (k in 1:10000) {
+for (k in 1:1000) {
   pot1 = c(
     "CONMEBOL1",
     "EU1",
@@ -154,6 +154,7 @@ for (k in 1:10000) {
   
   b[k] = assignment(2)
   draws[[k]] = initialgroups
+  print(paste("Simulation",k))
 }
 
 
@@ -457,7 +458,62 @@ countFIFA36 = 0
 # p1.35 = countFIFA35 * 100 / length(draws) #10.12%
 # p1.36 = countFIFA36 * 100 / length(draws) #7.45%
 
-#countmatrices are below
+pot1 = c(
+  "CONMEBOL1",
+  "EU1",
+  "CONMEBOL2",
+  "EU2",
+  "EU3",
+  "EU4",
+  "EU5",
+  "EU6",
+  "EU7",
+  "EU8",
+  "EU9",
+  "EU10",
+  "CONCACAF1",
+  "CONMEBOL3",
+  "CONCACAF2",
+  "CONCACAF3"
+)
+pot2 = c(
+  "EU11",
+  "CONMEBOL4",
+  "CAF1",
+  "EU12",
+  "AFC1",
+  "EU13",
+  "CAF2",
+  "CONMEBOL5",
+  "AFC2",
+  "EU14",
+  "EU15",
+  "EU16",
+  "AFC3",
+  "CONMEBOL6",
+  "CAF3",
+  "CONMEBOL7"
+)
+pot3 = c(
+  "CAF4",
+  "CAF5",
+  "OFC1",
+  "CAF6",
+  "CAF7",
+  "CAF8",
+  "CAF9",
+  "AFC4",
+  "AFC5",
+  "CAF10",
+  "CONCACAF4",
+  "CONCACAF5",
+  "AFC6",
+  "AFC7",
+  "CONCACAF6",
+  "AFC8"
+)
+
+
 incMatrix <- function(i, j) {
   countMatrixF[i, j] <<- countMatrixF[i, j] + 1
   
@@ -522,9 +578,9 @@ countMatrix3F
 ## Variances
 
 
-varmatrix1 = countMatrixF * (1 - countMatrixF) / sqrt(length(draws))
+varmatrix1 = countMatrixF * (1 - countMatrixF) / length(draws)
 round(varmatrix1, 4)
-confintmatrix1 = qnorm(0.975, 0, 1) * varmatrix1
+confintmatrix1 = qnorm(0.975, 0, 1) * sqrt(varmatrix1)
 round(confintmatrix1, 4)
 lbmatrix1 = countMatrixF - confintmatrix1
 round(lbmatrix1, 4)
@@ -532,9 +588,9 @@ ubmatrix1 = countMatrixF + confintmatrix1
 round(ubmatrix1, 4)
 
 
-varmatrix2 = countMatrix2F * (1 - countMatrix2F) / sqrt(length(draws))
+varmatrix2 = countMatrix2F * (1 - countMatrix2F) / length(draws)
 round(varmatrix2, 4)
-confintmatrix2 = qnorm(0.975, 0, 1) * varmatrix2
+confintmatrix2 = qnorm(0.975, 0, 1) * sqrt(varmatrix2)
 round(confintmatrix2, 4)
 lbmatrix2 = countMatrix2F - confintmatrix2
 round(lbmatrix2, 4)
@@ -542,12 +598,11 @@ ubmatrix2 = countMatrix2F + confintmatrix2
 round(ubmatrix2, 4)
 
 
-varmatrix3 = countMatrix3F * (1 - countMatrix3F) / sqrt(length(draws))
+varmatrix3 = countMatrix3F * (1 - countMatrix3F) / length(draws)
 round(varmatrix3, 4)
-confintmatrix3 = qnorm(0.975, 0, 1) * varmatrix3
+confintmatrix3 = qnorm(0.975, 0, 1) * sqrt(varmatrix3)
 round(confintmatrix3, 4)
 lbmatrix3 = countMatrix3F - confintmatrix3
 round(lbmatrix3, 4)
 ubmatrix3 = countMatrix3F + confintmatrix3
 round(ubmatrix3, 4)
-
