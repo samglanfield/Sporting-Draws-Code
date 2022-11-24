@@ -11,7 +11,7 @@ probofvalid=0;validity=0
 # countUniform19=0;countUniform20=0;countUniform21=0;countUniform22=0;countUniform23=0;countUniform24=0;countUniform25=0;countUniform26=0;countUniform27=0;countUniform28=0;countUniform29=0;countUniform30=0;countUniform31=0;countUniform32=0;countUniform33=0;countUniform34=0;countUniform35=0;countUniform36=0
 
 system.time(
-while(length(draws)<1000){
+while(length(draws)<10000){
   
   pot1 = c("CONMEBOL1","EU1","CONMEBOL2","EU2","EU3","EU4","EU5","EU6","EU7","EU8","EU9","EU10","CONCACAF1","CONMEBOL3","CONCACAF2","CONCACAF3")
   pot2 = c("EU11","CONMEBOL4","CAF1","EU12","AFC1","EU13","CAF2","CONMEBOL5","AFC2","EU14","EU15","EU16","AFC3","CONMEBOL6","CAF3","CONMEBOL7")
@@ -21,7 +21,15 @@ while(length(draws)<1000){
   
   initialgroups = array(rep(group,16),dim=c(1,3,16)) #Gives us all groups but are empty
   
-  initialgroups[1,1,] = sample(pot1,16)
+  initialgroups[1,1,c(1,7,13)] = pot1[c(13,15,16)]
+  pot1 = pot1[-c(13,15,16)]
+  
+  for(i in 1:length(pot1)) {
+    selected = sample(pot1, 1)
+    initialgroups[1, 1, which(initialgroups[1,1,]=="")[1]] = selected
+    pot1 = pot1[!pot1 %in% selected]
+  }
+  
   initialgroups[1,2,] = sample(pot2,16)
   initialgroups[1,3,] = sample(pot3,16)
   
@@ -220,3 +228,5 @@ lbmatrix3 = countMatrix3U - confintmatrix3
 round(lbmatrix3, 4)
 ubmatrix3 = countMatrix3U + confintmatrix3
 round(ubmatrix3, 4)
+
+
