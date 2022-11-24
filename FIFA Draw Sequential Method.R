@@ -1,4 +1,4 @@
-set.seed(31012001)
+set.seed(310101)
 
 checkvalid = function() {
   valid = matrix(0, nrow = 16, ncol = 6)
@@ -88,7 +88,7 @@ assignment = function(rowposition) {
 draws = list()
 b = c()
 
-for (k in 1:1000) {
+for (k in 1:10000) {
   pot1 = c(
     "CONMEBOL1",
     "EU1",
@@ -151,7 +151,7 @@ for (k in 1:1000) {
   
   for (i in 1:length(pot1)) {
     selected = sample(pot1, 1)
-    initialgroups[1, 1, i] = selected
+    initialgroups[1, 1, which(is.na(initialgroups[1,1,])==TRUE)[1]] = selected
     pot1 = pot1[!pot1 %in% selected]
   }
   
@@ -166,42 +166,42 @@ for (k in 1:1000) {
 
 
 
-#countFIFA1 = 0
-#countFIFA2 = 0
-#countFIFA3 = 0
-#countFIFA4 = 0
-#countFIFA5 = 0
-#countFIFA6 = 0
-#countFIFA7 = 0
-#countFIFA8 = 0
-#countFIFA9 = 0
-#countFIFA10 = 0
-#countFIFA11 = 0
-#countFIFA12 = 0
-#countFIFA13 = 0
-#countFIFA14 = 0
-#countFIFA15 = 0
-#countFIFA16 = 0
-#countFIFA17 = 0
-#countFIFA18 = 0
-#countFIFA19 = 0
-#countFIFA20 = 0
-#countFIFA21 = 0
-#countFIFA22 = 0
-#countFIFA23 = 0
-#countFIFA24 = 0
-#countFIFA25 = 0
-#countFIFA26 = 0
-#countFIFA27 = 0
-#countFIFA28 = 0
-#countFIFA29 = 0
-#countFIFA30 = 0
-#countFIFA31 = 0
-#countFIFA32 = 0
-#countFIFA33 = 0
-#countFIFA34 = 0
-#countFIFA35 = 0
-#countFIFA36 = 0
+countFIFA1 = 0
+countFIFA2 = 0
+countFIFA3 = 0
+countFIFA4 = 0
+countFIFA5 = 0
+countFIFA6 = 0
+countFIFA7 = 0
+countFIFA8 = 0
+countFIFA9 = 0
+countFIFA10 = 0
+countFIFA11 = 0
+countFIFA12 = 0
+countFIFA13 = 0
+countFIFA14 = 0
+countFIFA15 = 0
+countFIFA16 = 0
+countFIFA17 = 0
+countFIFA18 = 0
+countFIFA19 = 0
+countFIFA20 = 0
+countFIFA21 = 0
+countFIFA22 = 0
+countFIFA23 = 0
+countFIFA24 = 0
+countFIFA25 = 0
+countFIFA26 = 0
+countFIFA27 = 0
+countFIFA28 = 0
+countFIFA29 = 0
+countFIFA30 = 0
+countFIFA31 = 0
+countFIFA32 = 0
+countFIFA33 = 0
+countFIFA34 = 0
+countFIFA35 = 0
+countFIFA36 = 0
 # 
 # for (i in 1:length(draws)) {
 #   for (k in 1:16) {
@@ -609,3 +609,4 @@ lbmatrix3 = countMatrix3F - confintmatrix3
 round(lbmatrix3, 4)
 ubmatrix3 = countMatrix3F + confintmatrix3
 round(ubmatrix3, 4)
+
