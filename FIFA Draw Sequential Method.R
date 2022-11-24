@@ -146,6 +146,9 @@ for (k in 1:1000) {
   pot23 = rbind(pot2, pot3)
   initialgroups = array(rep(NA, 16), dim = c(1, 3, 16))
   
+  initialgroups[1,1,c(1,7,13)] = pot1[c(13,15,16)]
+  pot1 = pot1[-c(13,15,16)]
+  
   for (i in 1:length(pot1)) {
     selected = sample(pot1, 1)
     initialgroups[1, 1, i] = selected
@@ -163,42 +166,42 @@ for (k in 1:1000) {
 
 
 
-countFIFA1 = 0
-countFIFA2 = 0
-countFIFA3 = 0
-countFIFA4 = 0
-countFIFA5 = 0
-countFIFA6 = 0
-countFIFA7 = 0
-countFIFA8 = 0
-countFIFA9 = 0
-countFIFA10 = 0
-countFIFA11 = 0
-countFIFA12 = 0
-countFIFA13 = 0
-countFIFA14 = 0
-countFIFA15 = 0
-countFIFA16 = 0
-countFIFA17 = 0
-countFIFA18 = 0
-countFIFA19 = 0
-countFIFA20 = 0
-countFIFA21 = 0
-countFIFA22 = 0
-countFIFA23 = 0
-countFIFA24 = 0
-countFIFA25 = 0
-countFIFA26 = 0
-countFIFA27 = 0
-countFIFA28 = 0
-countFIFA29 = 0
-countFIFA30 = 0
-countFIFA31 = 0
-countFIFA32 = 0
-countFIFA33 = 0
-countFIFA34 = 0
-countFIFA35 = 0
-countFIFA36 = 0
+#countFIFA1 = 0
+#countFIFA2 = 0
+#countFIFA3 = 0
+#countFIFA4 = 0
+#countFIFA5 = 0
+#countFIFA6 = 0
+#countFIFA7 = 0
+#countFIFA8 = 0
+#countFIFA9 = 0
+#countFIFA10 = 0
+#countFIFA11 = 0
+#countFIFA12 = 0
+#countFIFA13 = 0
+#countFIFA14 = 0
+#countFIFA15 = 0
+#countFIFA16 = 0
+#countFIFA17 = 0
+#countFIFA18 = 0
+#countFIFA19 = 0
+#countFIFA20 = 0
+#countFIFA21 = 0
+#countFIFA22 = 0
+#countFIFA23 = 0
+#countFIFA24 = 0
+#countFIFA25 = 0
+#countFIFA26 = 0
+#countFIFA27 = 0
+#countFIFA28 = 0
+#countFIFA29 = 0
+#countFIFA30 = 0
+#countFIFA31 = 0
+#countFIFA32 = 0
+#countFIFA33 = 0
+#countFIFA34 = 0
+#countFIFA35 = 0
+#countFIFA36 = 0
 # 
 # for (i in 1:length(draws)) {
 #   for (k in 1:16) {
