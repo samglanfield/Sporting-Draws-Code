@@ -1,4 +1,6 @@
-set.seed(310101)
+set.seed(20317)
+
+#Below function checks if current partial draw is valid
 
 checkvalid = function() {
   valid = matrix(0, nrow = 16, ncol = 6)
@@ -10,7 +12,7 @@ checkvalid = function() {
     regcheckerrem[j, 4] = length(grep("^AFC", initialgroups[1, , j]))
     regcheckerrem[j, 5] = length(grep("^CAF", initialgroups[1, , j]))
     regcheckerrem[j, 6] = length(grep("^OFC", initialgroups[1, , j]))
-    if (regcheckerrem[j, 1] <= 2) {
+    if (regcheckerrem[j, 1] <= 1) {
       valid[j, 1] = 1
     } else{
       valid[j, 1] = 0
@@ -26,6 +28,7 @@ checkvalid = function() {
   return(prod(valid))
 }
 
+#Main function
 
 assignment = function(rowposition) {
   numplaced = 0
@@ -50,13 +53,21 @@ assignment = function(rowposition) {
   } else{
     while (length(is.na(initialgroups[1, rowposition, ]) == TRUE) > 0) {
       selected = sample(pot23[rowposition - 1, !pot23[rowposition - 1, ] %in% initialgroups[1, rowposition, ]], 1) 
-      
 
       for (i in 1:16) {
         if (placedat[i] == 0) {
           
-          
-          initialgroups[1, rowposition, i] = selected
+          x=i
+          if(length(grep("^EU",selected))==1){
+            eurplace = rep(0,16)
+            for(i in 1:16){
+              if(length(grep("^EU", initialgroups[1, , i]))==1){
+                eurplace[i]=1
+              }
+            }
+            x = which(eurplace==0)[1]
+          } #If havig 2 EU teams per group comment out this section and update checkvalid to allow for 2 EU teams
+          initialgroups[1, rowposition, x] = selected
           assign("initialgroups", initialgroups, envir = .GlobalEnv)
           
           validity = checkvalid()
@@ -68,7 +79,7 @@ assignment = function(rowposition) {
             
           } else{
             
-            initialgroups[1, rowposition, i] = NA
+            initialgroups[1, rowposition, x] = NA
             assign("initialgroups", initialgroups, envir = .GlobalEnv)
             
           }
@@ -85,9 +96,12 @@ assignment = function(rowposition) {
   
 }
 
-draws = list()
+#Below starts algorithm
+
+drawsFIFA = list()
 b = c()
 
+system.time(
 for (k in 1:10000) {
   pot1 = c(
     "CONMEBOL1",
@@ -156,310 +170,11 @@ for (k in 1:10000) {
   }
   
   b[k] = assignment(2)
-  draws[[k]] = initialgroups
+  drawsFIFA[[k]] = initialgroups
   print(paste("Simulation",k))
-}
+})
 
-
-
-
-
-
-
-countFIFA1 = 0
-countFIFA2 = 0
-countFIFA3 = 0
-countFIFA4 = 0
-countFIFA5 = 0
-countFIFA6 = 0
-countFIFA7 = 0
-countFIFA8 = 0
-countFIFA9 = 0
-countFIFA10 = 0
-countFIFA11 = 0
-countFIFA12 = 0
-countFIFA13 = 0
-countFIFA14 = 0
-countFIFA15 = 0
-countFIFA16 = 0
-countFIFA17 = 0
-countFIFA18 = 0
-countFIFA19 = 0
-countFIFA20 = 0
-countFIFA21 = 0
-countFIFA22 = 0
-countFIFA23 = 0
-countFIFA24 = 0
-countFIFA25 = 0
-countFIFA26 = 0
-countFIFA27 = 0
-countFIFA28 = 0
-countFIFA29 = 0
-countFIFA30 = 0
-countFIFA31 = 0
-countFIFA32 = 0
-countFIFA33 = 0
-countFIFA34 = 0
-countFIFA35 = 0
-countFIFA36 = 0
-# 
-# for (i in 1:length(draws)) {
-#   for (k in 1:16) {
-#     if ("EU1" %in% draws[[i]][1, , k] &&
-#         "CAF1" %in% draws[[i]][1, , k]) {
-#       countFIFA1 = countFIFA1 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU1" %in% draws[[i]][1, , k] &&
-#         "EU11" %in% draws[[i]][1, , k]) {
-#       countFIFA2 = countFIFA2 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU1" %in% draws[[i]][1, , k] &&
-#         "CONMEBOL4" %in% draws[[i]][1, , k]) {
-#       countFIFA3 = countFIFA3 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU1" %in% draws[[i]][1, , k] &&
-#         "AFC1" %in% draws[[i]][1, , k]) {
-#       countFIFA4 = countFIFA4 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONCACAF1" %in% draws[[i]][1, , k] &&
-#         "CAF1" %in% draws[[i]][1, , k]) {
-#       countFIFA5 = countFIFA5 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONCACAF1" %in% draws[[i]][1, , k] &&
-#         "AFC1" %in% draws[[i]][1, , k]) {
-#       countFIFA6 = countFIFA6 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONCACAF1" %in% draws[[i]][1, , k] &&
-#         "EU11" %in% draws[[i]][1, , k]) {
-#       countFIFA7 = countFIFA7 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONCACAF1" %in% draws[[i]][1, , k] &&
-#         "CONMEBOL4" %in% draws[[i]][1, , k]) {
-#       countFIFA8 = countFIFA8 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONMEBOL1" %in% draws[[i]][1, , k] &&
-#         "CAF1" %in% draws[[i]][1, , k]) {
-#       countFIFA9 = countFIFA9 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONMEBOL1" %in% draws[[i]][1, , k] &&
-#         "EU11" %in% draws[[i]][1, , k]) {
-#       countFIFA10 = countFIFA10 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONMEBOL1" %in% draws[[i]][1, , k] &&
-#         "AFC1" %in% draws[[i]][1, , k]) {
-#       countFIFA11 = countFIFA11 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONCACAF1" %in% draws[[i]][1, , k] &&
-#         "CAF9" %in% draws[[i]][1, , k]) {
-#       countFIFA12 = countFIFA12 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONCACAF1" %in% draws[[i]][1, , k] &&
-#         "AFC5" %in% draws[[i]][1, , k]) {
-#       countFIFA13 = countFIFA13 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONCACAF1" %in% draws[[i]][1, , k] &&
-#         "OFC1" %in% draws[[i]][1, , k]) {
-#       countFIFA14 = countFIFA14 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU1" %in% draws[[i]][1, , k] &&
-#         "CAF9" %in% draws[[i]][1, , k]) {
-#       countFIFA15 = countFIFA15 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU1" %in% draws[[i]][1, , k] &&
-#         "OFC1" %in% draws[[i]][1, , k]) {
-#       countFIFA16 = countFIFA16 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU1" %in% draws[[i]][1, , k] &&
-#         "AFC5" %in% draws[[i]][1, , k]) {
-#       countFIFA17 = countFIFA17 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU1" %in% draws[[i]][1, , k] &&
-#         "CONCACAF4" %in% draws[[i]][1, , k]) {
-#       countFIFA18 = countFIFA18 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONMEBOL1" %in% draws[[i]][1, , k] &&
-#         "CAF9" %in% draws[[i]][1, , k]) {
-#       countFIFA19 = countFIFA19 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONMEBOL1" %in% draws[[i]][1, , k] &&
-#         "OFC1" %in% draws[[i]][1, , k]) {
-#       countFIFA20 = countFIFA20 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONMEBOL1" %in% draws[[i]][1, , k] &&
-#         "AFC5" %in% draws[[i]][1, , k]) {
-#       countFIFA21 = countFIFA21 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONMEBOL1" %in% draws[[i]][1, , k] &&
-#         "CONCACAF4" %in% draws[[i]][1, , k]) {
-#       countFIFA22 = countFIFA22 + 1
-#     }
-#   }
-#   #ABOVE IS ALL POT 1 PERMUTATIONS WITH BOTH GROUP 1 AND 2 - BELOW IS POT2 AND 3 PERMUATIONS
-#   for (k in 1:16) {
-#     if ("CONMEBOL4" %in% draws[[i]][1, , k] &&
-#         "CAF9" %in% draws[[i]][1, , k]) {
-#       countFIFA23 = countFIFA23 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONMEBOL4" %in% draws[[i]][1, , k] &&
-#         "OFC1" %in% draws[[i]][1, , k]) {
-#       countFIFA24 = countFIFA24 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONMEBOL4" %in% draws[[i]][1, , k] &&
-#         "AFC5" %in% draws[[i]][1, , k]) {
-#       countFIFA25 = countFIFA25 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CONMEBOL4" %in% draws[[i]][1, , k] &&
-#         "CONCACAF4" %in% draws[[i]][1, , k]) {
-#       countFIFA26 = countFIFA26 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU11" %in% draws[[i]][1, , k] &&
-#         "CAF9" %in% draws[[i]][1, , k]) {
-#       countFIFA27 = countFIFA27 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU11" %in% draws[[i]][1, , k] &&
-#         "OFC1" %in% draws[[i]][1, , k]) {
-#       countFIFA28 = countFIFA28 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU11" %in% draws[[i]][1, , k] &&
-#         "AFC5" %in% draws[[i]][1, , k]) {
-#       countFIFA29 = countFIFA29 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("EU11" %in% draws[[i]][1, , k] &&
-#         "CONCACAF4" %in% draws[[i]][1, , k]) {
-#       countFIFA30 = countFIFA30 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CAF1" %in% draws[[i]][1, , k] &&
-#         "CONCACAF4" %in% draws[[i]][1, , k]) {
-#       countFIFA31 = countFIFA31 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CAF1" %in% draws[[i]][1, , k] &&
-#         "AFC5" %in% draws[[i]][1, , k]) {
-#       countFIFA32 = countFIFA32 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("CAF1" %in% draws[[i]][1, , k] &&
-#         "OFC1" %in% draws[[i]][1, , k]) {
-#       countFIFA33 = countFIFA33 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("AFC1" %in% draws[[i]][1, , k] &&
-#         "CONCACAF4" %in% draws[[i]][1, , k]) {
-#       countFIFA34 = countFIFA34 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("AFC1" %in% draws[[i]][1, , k] &&
-#         "CAF9" %in% draws[[i]][1, , k]) {
-#       countFIFA35 = countFIFA35 + 1
-#     }
-#   }
-#   for (k in 1:16) {
-#     if ("AFC1" %in% draws[[i]][1, , k] &&
-#         "OFC1" %in% draws[[i]][1, , k]) {
-#       countFIFA36 = countFIFA36 + 1
-#     }
-#   }
-# }
-
-# 
-# p1.1 = countFIFA1 * 100 / length(draws) #5.74%
-# p1.2 = countFIFA2 * 100 / length(draws) #5.82%
-# p1.3 = countFIFA3 * 100 / length(draws) #7.61%
-# p1.4 = countFIFA4 * 100 / length(draws) #5.85%
-# p1.5 = countFIFA5 * 100 / length(draws) #5.28%
-# p1.6 = countFIFA6 * 100 / length(draws) #5.97%
-# p1.7 = countFIFA7 * 100 / length(draws) #5.66%
-# p1.8 = countFIFA8 * 100 / length(draws) #7.55%
-# p1.9 = countFIFA9 * 100 / length(draws) #8.55%
-# p1.10 = countFIFA10 * 100 / length(draws) #8.28%
-# p1.11= countFIFA11 * 100 / length(draws) #8.89%
-# p1.12 = countFIFA12 * 100 / length(draws) #7.5%
-# p1.13 = countFIFA13 * 100 / length(draws) #8.14%
-# p1.14 = countFIFA14 * 100 / length(draws) #8.54%
-# p1.15 = countFIFA15 * 100 / length(draws) #5.88%
-# p1.16 = countFIFA16 * 100 / length(draws) #5.47%
-# p1.17 = countFIFA17 * 100 / length(draws) #6.22%
-# p1.18 = countFIFA18 * 100 / length(draws) #7.74%
-# p1.19 = countFIFA19 * 100 / length(draws) #6.2%
-# p1.20 = countFIFA20 * 100 / length(draws) #6.3%
-# p1.21 = countFIFA21 * 100 / length(draws) #5.68%
-# p1.22 = countFIFA22 * 100 / length(draws) #8.14%
-# p1.23 = countFIFA23 * 100 / length(draws) #6.97%
-# p1.24 = countFIFA24 * 100 / length(draws) #4.02%
-# p1.25 = countFIFA25 * 100 / length(draws) #6.4%
-# p1.26 = countFIFA26 * 100 / length(draws) #4.62%
-# p1.27 = countFIFA27 * 100 / length(draws) #7.22%
-# p1.28 = countFIFA28 * 100 / length(draws) #4.87%
-# p1.29 = countFIFA29 * 100 / length(draws) #6.57%
-# p1.30 = countFIFA30 * 100 / length(draws) #5.33%
-# p1.31 = countFIFA31 * 100 / length(draws) #10.02%
-# p1.32 = countFIFA32 * 100 / length(draws) #11.81%
-# p1.33 = countFIFA33 * 100 / length(draws) #10.24%
-# p1.34 = countFIFA34 * 100 / length(draws) #7.36%
-# p1.35 = countFIFA35 * 100 / length(draws) #10.12%
-# p1.36 = countFIFA36 * 100 / length(draws) #7.45%
+#Below produces the match up probabilities between pots
 
 pot1 = c(
   "CONMEBOL1",
@@ -542,10 +257,10 @@ row.names(countMatrixF) <- pot1
 colnames(countMatrixF) <- pot2
 
 
-for (i in 1:length(draws)) {
-  mapply(incMatrix, draws[[i]][1, 1, ], draws[[i]][1, 2, ])
+for (i in 1:length(drawsFIFA)) {
+  mapply(incMatrix, drawsFIFA[[i]][1, 1, ], drawsFIFA[[i]][1, 2, ])
 }
-countMatrixF = countMatrixF / length(draws)
+countMatrixF = countMatrixF / length(drawsFIFA)
 countMatrixF
 
 countMatrix2F <- matrix(0, 16, 16)
@@ -554,11 +269,11 @@ row.names(countMatrix2F) <- pot1
 colnames(countMatrix2F) <- pot3
 
 
-for (i in 1:length(draws)) {
-  mapply(incMatrix2, draws[[i]][1, 1, ], draws[[i]][1, 3, ])
+for (i in 1:length(drawsFIFA)) {
+  mapply(incMatrix2, drawsFIFA[[i]][1, 1, ], drawsFIFA[[i]][1, 3, ])
 }
 
-countMatrix2F = countMatrix2F / length(draws)
+countMatrix2F = countMatrix2F / length(drawsFIFA)
 countMatrix2F
 
 
@@ -568,20 +283,38 @@ row.names(countMatrix3F) <- pot2
 colnames(countMatrix3F) <- pot3
 
 
-for (i in 1:length(draws)) {
-  mapply(incMatrix3, draws[[i]][1, 2, ], draws[[i]][1, 3, ])
+for (i in 1:length(drawsFIFA)) {
+  mapply(incMatrix3, drawsFIFA[[i]][1, 2, ], drawsFIFA[[i]][1, 3, ])
 }
 
-countMatrix3F = countMatrix3F / length(draws)
+countMatrix3F = countMatrix3F / length(drawsFIFA)
 countMatrix3F
 
+## Count Matrix for the groups
 
+
+pot1 = c("CONMEBOL1","EU1","CONMEBOL2","EU2","EU3","EU4","EU5","EU6","EU7","EU8","EU9","EU10","CONCACAF1","CONMEBOL3","CONCACAF2","CONCACAF3")
+pot2 = c("EU11","CONMEBOL4","CAF1","EU12","AFC1","EU13","CAF2","CONMEBOL5","AFC2","EU14","EU15","EU16","AFC3","CONMEBOL6","CAF3","CONMEBOL7")
+pot3 = c("CAF4","CAF5","OFC1","CAF6","CAF7","CAF8","CAF9","AFC4","AFC5","CAF10","CONCACAF4","CONCACAF5","AFC6","AFC7","CONCACAF6","AFC8")
+
+countArrayF = array(0,dim=c(16,16,16),dimnames=list(pot1,pot2,pot3))
+
+incArrayF <- function(i, j, k) {
+  countArrayF[i, j, k] <<- countArrayF[i, j, k] + 1
+  return(0)
+}
+
+for(i in 1:length(drawsFIFA)){
+  mapply(incArrayF,drawsFIFA[[i]][1,1,],drawsFIFA[[i]][1,2,],drawsFIFA[[i]][1,3,])
+}
+
+countArrayF = countArrayF/length(drawsFIFA)
 
 ##############################
 ## Variances
 
 
-varmatrix1 = countMatrixF * (1 - countMatrixF) / length(draws)
+varmatrix1 = countMatrixF * (1 - countMatrixF) / length(drawsFIFA)
 round(varmatrix1, 4)
 confintmatrix1 = qnorm(0.975, 0, 1) * sqrt(varmatrix1)
 round(confintmatrix1, 4)
@@ -591,7 +324,7 @@ ubmatrix1 = countMatrixF + confintmatrix1
 round(ubmatrix1, 4)
 
 
-varmatrix2 = countMatrix2F * (1 - countMatrix2F) / length(draws)
+varmatrix2 = countMatrix2F * (1 - countMatrix2F) / length(drawsFIFA)
 round(varmatrix2, 4)
 confintmatrix2 = qnorm(0.975, 0, 1) * sqrt(varmatrix2)
 round(confintmatrix2, 4)
@@ -601,7 +334,7 @@ ubmatrix2 = countMatrix2F + confintmatrix2
 round(ubmatrix2, 4)
 
 
-varmatrix3 = countMatrix3F * (1 - countMatrix3F) / length(draws)
+varmatrix3 = countMatrix3F * (1 - countMatrix3F) / length(drawsFIFA)
 round(varmatrix3, 4)
 confintmatrix3 = qnorm(0.975, 0, 1) * sqrt(varmatrix3)
 round(confintmatrix3, 4)
@@ -610,3 +343,292 @@ round(lbmatrix3, 4)
 ubmatrix3 = countMatrix3F + confintmatrix3
 round(ubmatrix3, 4)
 
+#Variance of groups counts
+
+varArray = countArray * (1 - countArray) / length(drawsFIFA)
+round(varArray, 4)
+confintArray = qnorm(0.975, 0, 1) * sqrt(varArray)
+round(confintArray, 4)
+lbArray = countArray - confintArray
+round(lbArray, 4)
+ubArray = countArray + confintArray
+round(ubArray, 4)
+
+####################################
+## Skewness
+
+
+incMatrixgen <- function(i, j) {
+  countmatrix[i, j] <<- countmatrix[i, j] + 1
+  return(0)
+}
+
+incArraygen <- function(i, j, k) {
+  countarray[i, j, k] <<- countarray[i, j, k] + 1
+  return(0)
+}
+
+set.seed(1926002)
+index = sample(1:length(drawsFIFA))
+
+for(i in 1:100){
+  low = (1000*(i-1)+1); up = 1000*i
+  assign(paste("subdrawsFIFA",i,sep=""),drawsFIFA[index[low:up]],envir=.GlobalEnv)
+  assign(paste("countmatrixf",i,sep=""),matrix(0,nrow=16,ncol=16),envir = .GlobalEnv)
+  x=get(paste("countmatrixf",i,sep=""),env=.GlobalEnv)
+  rownames(x) = pot1; colnames(x) = pot2;assign(paste("countmatrixf",i,sep=""),x,envir=.GlobalEnv)
+  assign(paste("countmatrix2f",i,sep=""),matrix(0,nrow=16,ncol=16),envir = .GlobalEnv)
+  y=get(paste("countmatrix2f",i,sep=""),env=.GlobalEnv)
+  rownames(y) = pot1; colnames(y) = pot3;assign(paste("countmatrix2f",i,sep=""),y,envir=.GlobalEnv)
+  assign(paste("countmatrix3f",i,sep=""),matrix(0,nrow=16,ncol=16),envir = .GlobalEnv)
+  z=get(paste("countmatrix3f",i,sep=""),env=.GlobalEnv)
+  rownames(z) = pot2; colnames(z) = pot3;assign(paste("countmatrix3f",i,sep=""),z,envir=.GlobalEnv)
+  #array
+  assign(paste("countarray",i,sep=""),array(0,dim=c(16,16,16)),envir = .GlobalEnv)
+  z=get(paste("countarray",i,sep=""),env=.GlobalEnv)
+  dimnames(z) = list(pot1,pot2,pot3);assign(paste("countarray",i,sep=""),z,envir=.GlobalEnv)
+  
+  #Skewness matrices
+  assign(paste("countmatrixfskew",i,sep=""),matrix(0,nrow=16,ncol=16),envir = .GlobalEnv)
+  x=get(paste("countmatrixfskew",i,sep=""),env=.GlobalEnv)
+  rownames(x) = pot1; colnames(x) = pot2;assign(paste("countmatrixfskew",i,sep=""),x,envir=.GlobalEnv)
+  assign(paste("countmatrix2fskew",i,sep=""),matrix(0,nrow=16,ncol=16),envir = .GlobalEnv)
+  y=get(paste("countmatrix2fskew",i,sep=""),env=.GlobalEnv)
+  rownames(y) = pot1; colnames(y) = pot3;assign(paste("countmatrix2fskew",i,sep=""),y,envir=.GlobalEnv)
+  assign(paste("countmatrix3fskew",i,sep=""),matrix(0,nrow=16,ncol=16),envir = .GlobalEnv)
+  z=get(paste("countmatrix3fskew",i,sep=""),env=.GlobalEnv)
+  rownames(z) = pot2; colnames(z) = pot3;assign(paste("countmatrix3fskew",i,sep=""),z,envir=.GlobalEnv)
+  #array
+  assign(paste("countarrayskew",i,sep=""),array(0,dim=c(16,16,16)),envir = .GlobalEnv)
+  z=get(paste("countarrayskew",i,sep=""),env=.GlobalEnv)
+  dimnames(z) = list(pot1,pot2,pot3);assign(paste("countarrayskew",i,sep=""),z,envir=.GlobalEnv)
+}
+
+for(i in 1:100){
+  for(j in 1:length(subdrawsFIFA1)){
+      x = get(paste("subdrawsFIFA",i,sep=""),env=.GlobalEnv)[[j]]
+      y = get(paste("countmatrixf",i,sep=""),env=.GlobalEnv)
+      
+      countmatrix = matrix(0,nrow=16,ncol=16);rownames(countmatrix)=pot1;colnames(countmatrix)=pot2
+      mapply(incMatrixgen,x[1,1,],x[1,2,])
+      assign(paste("countmatrixf",i,sep=""),y+countmatrix,envir=.GlobalEnv)
+      
+      z = get(paste("countmatrix2f",i,sep=""),env=.GlobalEnv)
+      
+      countmatrix = matrix(0,nrow=16,ncol=16);rownames(countmatrix)=pot1;colnames(countmatrix)=pot3
+      mapply(incMatrixgen,x[1,1,],x[1,3,])
+      assign(paste("countmatrix2f",i,sep=""),z+countmatrix,envir=.GlobalEnv)
+      
+      w = get(paste("countmatrix3f",i,sep=""),env=.GlobalEnv)
+      
+      countmatrix = matrix(0,nrow=16,ncol=16);rownames(countmatrix)=pot2;colnames(countmatrix)=pot3
+      mapply(incMatrixgen,x[1,2,],x[1,3,])
+      assign(paste("countmatrix3f",i,sep=""),w+countmatrix,envir=.GlobalEnv)
+      
+  }
+  assign(paste("countmatrixf",i,sep=""),get(paste("countmatrixf",i,sep=""))/length(subdrawsFIFA1),envir=.GlobalEnv)
+  assign(paste("countmatrix2f",i,sep=""),get(paste("countmatrix2f",i,sep=""))/length(subdrawsFIFA1),envir=.GlobalEnv)
+  assign(paste("countmatrix3f",i,sep=""),get(paste("countmatrix3f",i,sep=""))/length(subdrawsFIFA1),envir=.GlobalEnv)
+}
+
+for(i in 1:100){
+  for(j in 1:length(subdrawsFIFA1)){
+    x = get(paste("subdrawsFIFA",i,sep=""))[j]
+    y = get(paste("countarray",i,sep=""))
+    
+    countarray = array(0,dim=c(16,16,16),dimnames=list(pot1,pot2,pot3))
+    mapply(incArraygen,x[[1]][1,1,],x[[1]][1,2,],x[[1]][1,3,])
+    assign(paste("countarray",i,sep=""),y+countarray,envir=.GlobalEnv)
+  }
+  assign(paste("countarray",i,sep=""),get(paste("countarray",i,sep=""))/length(subdrawsFIFA1),envir=.GlobalEnv)
+}
+
+bernskewness = function(x){
+  y = ((1-2*x)/sqrt(x*(1-x)))/sqrt(length(subdrawsFIFA1))
+  y[which(y==Inf)] = NA
+  return(y)
+}
+
+bernexkurt = function(x){
+  y=(1-6*x*(1-x))/(x*(1-x))
+  y[which(y==Inf)] = NA
+  return(y)
+}
+
+for(i in 1:100){
+  assign(paste("countmatrixfskew",i,sep=""),bernskewness(get(paste("countmatrixf",i,sep=""),env=.GlobalEnv)),envir=.GlobalEnv)
+  assign(paste("countmatrix2fskew",i,sep=""),bernskewness(get(paste("countmatrix2f",i,sep=""),env=.GlobalEnv)),envir=.GlobalEnv)
+  assign(paste("countmatrix3fskew",i,sep=""),bernskewness(get(paste("countmatrix3f",i,sep=""),env=.GlobalEnv)),envir=.GlobalEnv)
+  assign(paste("countarrayskew",i,sep=""),bernskewness(get(paste("countarray",i,sep=""),env=.GlobalEnv)),envir=.GlobalEnv)
+}
+
+countmatrixf1skewarray = array(get(paste("countmatrixfskew",1,sep=""),env=.GlobalEnv),dim=c(16,16,1))
+countmatrixf2skewarray = array(get(paste("countmatrix2fskew",1,sep=""),env=.GlobalEnv),dim=c(16,16,1))
+countmatrixf3skewarray = array(get(paste("countmatrix3fskew",1,sep=""),env=.GlobalEnv),dim=c(16,16,1))
+countarrayskewarray = array(get(paste("countarrayskew",1,sep=""),env=.GlobalEnv),dim=c(16,16,16,1))
+
+for(i in 2:100){
+  countmatrixf1skewarray = array(c(countmatrixf1skewarray,get(paste("countmatrixfskew",i,sep=""),env=.GlobalEnv)),dim=c(16,16,i))
+  countmatrixf2skewarray = array(c(countmatrixf2skewarray,get(paste("countmatrix2fskew",i,sep=""),env=.GlobalEnv)),dim=c(16,16,i))
+  countmatrixf3skewarray = array(c(countmatrixf3skewarray,get(paste("countmatrix3fskew",i,sep=""),env=.GlobalEnv)),dim=c(16,16,i))
+  countarrayskewarray = array(c(countarrayskewarray,get(paste("countarrayskew",i,sep=""),env=.GlobalEnv)),dim=c(16,16,16,i))
+}
+
+apply(countmatrixf1skewarray,c(1,2),mean)
+apply(countmatrixf2skewarray,c(1,2),mean)
+apply(countmatrixf3skewarray,c(1,2),mean)
+apply(countarrayskewarray,c(1,2,3),mean)
+
+apply(countmatrixf1skewarray,c(1,2),var)
+apply(countmatrixf2skewarray,c(1,2),var)
+apply(countmatrixf3skewarray,c(1,2),var)
+apply(countarrayskewarray,c(1,2,3),var)
+
+
+countmatrixf1array = array(get(paste("countmatrixf",1,sep=""),env=.GlobalEnv),dim=c(16,16,1))
+countmatrixf2array = array(get(paste("countmatrix2f",1,sep=""),env=.GlobalEnv),dim=c(16,16,1))
+countmatrixf3array = array(get(paste("countmatrix3f",1,sep=""),env=.GlobalEnv),dim=c(16,16,1))
+countarrayarray = array(get(paste("countarray",1,sep=""),env=.GlobalEnv),dim=c(16,16,16,1))
+
+for(i in 2:100){
+  countmatrixf1array = array(c(countmatrixf1array,get(paste("countmatrixf",i,sep=""),env=.GlobalEnv)),dim=c(16,16,i))
+  countmatrixf2array = array(c(countmatrixf2array,get(paste("countmatrix2f",i,sep=""),env=.GlobalEnv)),dim=c(16,16,i))
+  countmatrixf3array = array(c(countmatrixf3array,get(paste("countmatrix3f",i,sep=""),env=.GlobalEnv)),dim=c(16,16,i))
+  countarrayarray = array(c(countarrayarray,get(paste("countarray",i,sep=""),env=.GlobalEnv)),dim=c(16,16,16,i))
+}
+
+apply(countmatrixf1array,c(1,2),mean)
+apply(countmatrixf2array,c(1,2),mean)
+apply(countmatrixf3array,c(1,2),mean)
+apply(countarrayarray,c(1,2,3),mean)
+
+apply(countmatrixf1array,c(1,2),var)
+apply(countmatrixf2array,c(1,2),var)
+apply(countmatrixf3array,c(1,2),var)
+apply(countarrayarray,c(1,2,3),var)
+
+
+#tests for normality
+
+hist(countarrayarray[1,1,1,],probability =TRUE,breaks = 15)
+
+hist(countmatrixf1array[1,1,],probability = TRUE,breaks=15)
+
+
+
+library(tseries);library(nortest)
+
+#for count matrices
+
+Shap = array(0,dim=c(16,16,3)); JB = array(0,dim=c(16,16,3)); AD = array(0,dim=c(16,16,3)); CVM = array(0,dim=c(16,16,3)); Pearson = array(0,dim=c(16,16,3))
+
+for(i in 1:3){
+  countarray = get(paste("countmatrixf",i,"array",sep=""),env=.GlobalEnv)
+  for(j in 1:16){
+    for(k in 1:16){
+      if(sum(countarray[j,k,])>0){
+      Shap[j,k,i] = shapiro.test(countarray[j,k,])$p.value
+      JB[j,k,i] = jarque.bera.test(countarray[j,k,])$p.value
+      AD[j,k,i] = ad.test(countarray[j,k,])$p.value
+      CVM[j,k,i] = cvm.test(countarray[j,k,])$p.value
+      Pearson[j,k,i] = pearson.test(countarray[j,k,])$p.value
+      }
+    }
+  }
+}
+
+Shapaccept = length(which(Shap[which(Shap>0)]>=0.05)); totalShap = length(Shap[which(Shap>0)]); propShap = Shapaccept/totalShap
+JBaccept = length(which(JB[which(JB>0)]>=0.05)); totalJB = length(JB[which(JB>0)]); propJB = JBaccept/totalJB
+ADaccept = length(which(AD[which(AD>0)]>=0.05)); totalAD = length(AD[which(AD>0)]); propAD = ADaccept/totalAD
+CVMaccept = length(which(CVM[which(CVM>0)]>=0.05)); totalCVM = length(CVM[which(CVM>0)]); propCVM = CVMaccept/totalCVM
+Pearsonaccept = length(which(Pearson[which(Pearson>0)]>=0.05)); totalPearson = length(Pearson[which(Pearson>0)]); propPearson = Pearsonaccept/totalPearson
+
+#for count array
+
+Shap = array(0,dim=c(16,16,16)); JB = array(0,dim=c(16,16,16)); AD = array(0,dim=c(16,16,16)); CVM = array(0,dim=c(16,16,16)); Pearson = array(0,dim=c(16,16,16))
+countarray=countarrayarray
+
+for(i in 1:16){
+  for(j in 1:16){
+    for(k in 1:16){
+      if(sum(countarray[1,i,j,k])>0){
+        Shap[1,i,j,k] = shapiro.test(countarray[1,i,j,k])$p.value
+        JB[1,i,j,k] = jarque.bera.test(countarray[1,i,j,k])$p.value
+        AD[1,i,j,k] = ad.test(countarray[1,i,j,k])$p.value
+        CVM[1,i,j,k] = cvm.test(countarray[1,i,j,k])$p.value
+        Pearson[1,i,j,k] = pearson.test(countarray[1,i,j,k])$p.value
+      }
+    }
+  }
+}
+
+Shapaccept = length(which(Shap[which(Shap>0)]>=0.05)); totalShap = length(Shap[which(Shap>0)]); propShap = Shapaccept/totalShap
+JBaccept = length(which(JB[which(JB>0)]>=0.05)); totalJB = length(JB[which(JB>0)]); propJB = JBaccept/totalJB
+ADaccept = length(which(AD[which(AD>0)]>=0.05)); totalAD = length(AD[which(AD>0)]); propAD = ADaccept/totalAD
+CVMaccept = length(which(CVM[which(CVM>0)]>=0.05)); totalCVM = length(CVM[which(CVM>0)]); propCVM = CVMaccept/totalCVM
+Pearsonaccept = length(which(Pearson[which(Pearson>0)]>=0.05)); totalPearson = length(Pearson[which(Pearson>0)]); propPearson = Pearsonaccept/totalPearson
+
+
+#Lyapunov condition
+
+pot1 = c("CONMEBOL1","EU1","CONMEBOL2","EU2","EU3","EU4","EU5","EU6","EU7","EU8","EU9","EU10","CONCACAF1","CONMEBOL3","CONCACAF2","CONCACAF3")
+pot2 = c("EU11","CONMEBOL4","CAF1","EU12","AFC1","EU13","CAF2","CONMEBOL5","AFC2","EU14","EU15","EU16","AFC3","CONMEBOL6","CAF3","CONMEBOL7")
+pot3 = c("CAF4","CAF5","OFC1","CAF6","CAF7","CAF8","CAF9","AFC4","AFC5","CAF10","CONCACAF4","CONCACAF5","AFC6","AFC7","CONCACAF6","AFC8")
+
+x = which(countArrayF %in% min(countArrayF[which(countArrayF>0)]))
+
+countArrayF = array(0,dim=c(16,16,16),dimnames=list(pot1,pot2,pot3))
+
+
+Lyapunov = c()
+
+for(i in 1:length(drawsFIFA)){
+  mapply(incArrayF,drawsFIFA[[i]][1,1,],drawsFIFA[[i]][1,2,],drawsFIFA[[i]][1,3,])
+  
+  probArray = countArrayF/i
+  
+  Lyapunov[i] = probArray[x]*(1-probArray[x])
+}
+
+plot(cumsum(Lyapunov),type="l",lwd=1.5)
+
+
+## Hellinger estimator 1
+
+#install.packages("textmineR")
+library("textmineR")
+
+pot1 = c("CONMEBOL1","EU1","CONMEBOL2","EU2","EU3","EU4","EU5","EU6","EU7","EU8","EU9","EU10","CONCACAF1","CONMEBOL3","CONCACAF2","CONCACAF3")
+pot2 = c("EU11","CONMEBOL4","CAF1","EU12","AFC1","EU13","CAF2","CONMEBOL5","AFC2","EU14","EU15","EU16","AFC3","CONMEBOL6","CAF3","CONMEBOL7")
+pot3 = c("CAF4","CAF5","OFC1","CAF6","CAF7","CAF8","CAF9","AFC4","AFC5","CAF10","CONCACAF4","CONCACAF5","AFC6","AFC7","CONCACAF6","AFC8")
+
+countArrayS = array(0,dim=c(16,16,16),dimnames=list(pot1,pot2,pot3))
+countArrayU = array(0,dim=c(16,16,16),dimnames=list(pot1,pot2,pot3))
+
+incArrayS <- function(i, j, k) {
+  countArrayS[i, j, k] <<- countArrayS[i, j, k] + 1
+  return(0)
+}
+incArrayU <- function(i, j, k) {
+  countArrayU[i, j, k] <<- countArrayU[i, j, k] + 1
+  return(0)
+}
+
+HeVector = c()
+
+for(i in 1:length(drawsFIFA)){
+  mapply(incArrayS,drawsFIFA[[i]][1,1,],drawsFIFA[[i]][1,2,],drawsFIFA[[i]][1,3,])
+  mapply(incArrayU,drawsUniform[[i]][1,1,],drawsUniform[[i]][1,2,],drawsUniform[[i]][1,3,])
+  
+  countArrayU=countArrayU/i; countArrayS=countArrayS/i
+  
+  indexS = which(countArrayS==0); indexU = which(countArrayU==0)
+  if(length(indexU)>=length(indexS)){index=indexU
+  } else {index=indexS}
+  HeVector[i] = CalcHellingerDist(c(countArrayS[-index]),c(countArrayU[-index]))
+  
+  countArrayU=countArrayU*i; countArrayS=countArrayS*i
+  print(paste("Simulation",i))
+}
+
+plot(HeVector,type="l",lwd=1.5)
