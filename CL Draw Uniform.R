@@ -1,3 +1,7 @@
+set.seed(1926002)
+
+#Checks if given draw is valid
+
 checkvalid = function(){
   valid1=c()
   valid=matrix(0,nrow=8,ncol=3)
@@ -30,7 +34,9 @@ pots=rbind(pot1,pot2)
 
 alldraws=list();validity=c()
 
-while(length(alldraws)<1000){
+#begin algorithm
+
+while(length(alldraws)<100000){
   initialgroups = array(rep(NA,8),dim=c(1,2,8)) 
   pot1 = c("ITNap","PORPor","GERBay","UKTot","UKChe","SPARM","UKMC","PORBen")
   pot2 = c("UKLiv","BELCB","ITIM","GERFra","ITMil","GERLei","GERDort","FRAPSG")
@@ -47,11 +53,14 @@ while(length(alldraws)<1000){
 }
 
 
+#creates mathcup probabilities
+
 for(i in 1:length(alldraws)){
   mapply(incMatrix,alldraws[[i]][1,1,],alldraws[[i]][1,2,])
 }
 countMatrixu=countMatrixu/length(alldraws);countMatrixu
 
+#variances
 
 varmatrixu = countMatrixu * (1 - countMatrixu) / length(alldraws)
 round(varmatrixu, 4)
@@ -61,7 +70,5 @@ lbmatrixu = countMatrixu - confintmatrixu
 round(lbmatrixu, 4)
 ubmatrixu = countMatrixu + confintmatrixu
 round(ubmatrixu, 4)
-
-
 
 
