@@ -9,4 +9,4 @@ The 2026 World Cup group stage draw features a major change in the format of the
 
 The Champions League code is self explanatory and if adapted to different seasons changes need to be made. The first change is update the pots of runner ups and group winners. Second, is for each team update the list of possible teams they can play and thus set, in the algorithm, the starting point of where all permutations of the draw are computed to the length of the smallest possible list less 1.
 
-The files for the sequential method of each draw contains tests for normality and the hellinger estimator. The files for calculating the Total Variation distance require that the R Data files are loaded in prior to running the code.
+The files for the sequential method of each draw contains tests for normality and the hellinger estimator. The files for calculating the Total Variation distance require that draws are simulated and loaded before running the code.
